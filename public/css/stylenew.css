@@ -1,0 +1,261 @@
+/* CSS */
+
+/* Body Start */
+body {
+    font-family: 'Oswald', sans-serif !important;
+    background-color: #181717;
+    overflow-x: hidden; /* Added to prevent horizontal scrolling */
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 50px;
+    text-align: center;
+    color: azure; 
+    margin-bottom: 2%; 
+    margin-top: 2%;
+}
+
+.instagram-post{
+    overflow: hidden;
+}
+/* Body End */
+
+/* Navbar Start */
+.navbar-nav .nav-link {
+    color: #FFFFFF !important;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: orange !important;
+}
+
+/* Carousel */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media (max-width: 1000px) {
+    .carousel-container {
+        max-height: 50vh;
+        width: auto;
+    }
+    
+    .carousel-item img {
+        max-height: 50vh;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 15%;
+        opacity: 0.8;
+    }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        max-height: 40vh;
+    }
+    
+    .carousel-item img {
+        max-height: 40vh;
+    }
+}
+
+.carousel-indicators {
+    bottom: 10px;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 4px;
+    margin: 0 3px;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .carousel-indicators [data-bs-target] {
+        width: 10px;
+        height: 3px;
+        margin: 0 2px;
+    }
+}
+
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
+}
+
+.carousel-inner {
+    touch-action: pan-y pinch-zoom;
+}
+/* Navbar End */
+
+/* Swiper Carousel */
+.swiper-container {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* add by dwiky */
+    overflow: hidden;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    max-width: 85%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+        
+/* Card Animation (KEUNGGULAN Section) */
+.cardben {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-radius: 24px;
+    line-height: 1.6;
+    transition: all 0.64s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 36px;
+    border-radius: 24px;
+    background: transparent;
+    color: #ffffff;
+    z-index: 1;
+    transition: all 0.64s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cardben::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ffffff;
+    border-radius: inherit;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transform: skew(0deg); /* Changed from -0deg for better cross-browser compatibility */
+    clip-path: circle(0% at 50% 50%);
+    transition: all 0.64s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.content .heading {
+    font-family: 'Oswald', sans-serif !important;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.3;
+    z-index: 1;
+}
+
+.content .para {
+    z-index: 1;
+    opacity: 0.8;
+    font-size: 18px;
+}
+
+.content .para-sm {
+    font-size: 16px;
+}
+
+.cardben:hover::before {
+    opacity: 1;
+    transform: skew(0deg);
+    clip-path: circle(140.9% at 0 0);
+}
+
+.cardben:hover .content {
+    color: #181717;
+}
+
+.cardben .card-icon {
+    color: white;
+    transition: color 0.64s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cardben:hover .card-icon {
+    color: #e55a5b;
+}
+
+/* Custom Card (KEUNGGULAN Section) */
+.custom-card {
+    background-color: #181717; 
+    border-radius: 1rem; 
+    padding: 2rem;
+    height: 100%;
+    border: 1px solid #d3d3d3;
+}
+
+.card-icon {
+    color: #ffffff;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.text-red {
+    color: #e55a5b;
+    font-weight: bold;
+}
+
+.btn-instagram {
+    color: #FFFFFF;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    transition: 0.3s;
+}
+        
+.btn-instagram:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+    color: #fff;
+}
+
+/* Footer */
+.footer-title{
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 25px;
+    color: azure;
+}
+
+        
+
