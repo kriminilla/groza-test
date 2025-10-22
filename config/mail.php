@@ -109,10 +109,11 @@ return [
     | used globally for all emails that are sent by your application.
     |
     */
-
+    
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'noreply@groza.id'),
+        'name' => env('MAIL_FROM_NAME', 'GROZA INDONESIA'),
     ],
+
 
 ];

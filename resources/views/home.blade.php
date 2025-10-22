@@ -1,50 +1,76 @@
 @extends('partials.master')
 
-@section('title', 'Homepage')
+@section('title', 'GROZA | Beranda')
 
 @section('content')
 <!-- Landing Carousel Start -->
-<div id="carouselExampleControls" class="carousel slide" data-mdb-ride="carousel" data-mdb-carousel-init>
-<div class="carousel-inner">
-    <div class="carousel-item active">
-        <img src="{{ asset('img/grz1-830.png') }}" loading="lazy" class="d-block w-100" alt="Never Stop, Build and Race It">
+<div id="carouselExampleControls" class="carousel slide" data-mdb-ride="carousel">
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        @foreach($heroImages as $index => $hero)
+            <button type="button" data-mdb-target="#carouselExampleControls"
+                    data-mdb-slide-to="{{ $index }}"
+                    class="{{ $index == 0 ? 'active' : '' }}"
+                    aria-current="{{ $index == 0 ? 'true' : 'false' }}"
+                    aria-label="Slide {{ $index+1 }}">
+            </button>
+        @endforeach
     </div>
-    <div class="carousel-item">
-        <img src="{{ asset('img/grz1-830.png') }}" loading="lazy" class="d-block w-100" alt="Groza Indonesia">
+
+    <!-- Carousel Items -->
+    <div class="carousel-inner">
+        @foreach($heroImages as $index => $hero)
+            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                <img src="{{ asset($hero->src) }}"
+                     loading="lazy"
+                     class="d-block w-100"
+                     alt="{{ $hero->alt ?? 'Hero Image ' . ($index+1) }}">
+            </div>
+        @endforeach
     </div>
-    <div class="carousel-item">
-        <img src="{{ asset('img/grz1-830.png') }}" loading="lazy" class="d-block w-100" alt="Inovasi Groza">
-    </div>
-</div>
-<button class="carousel-control-prev" type="button" data-mdb-target="#carouselExampleControls" data-mdb-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-</button>
-<button class="carousel-control-next" type="button" data-mdb-target="#carouselExampleControls" data-mdb-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-</button>
 </div>
 <!-- Landing Carousel End -->
+
 
 <!-- Products Start -->
 <p class="section-title">PRODUCTS</p>
 <div class="swiper-container">
     <div class="swiper-wrapper">
+
+        <!-- Aksesoris -->
         <div class="swiper-slide">
-            <img src="img/Produk-Kategori-Aksesori.png" loading="lazy" alt="Aksesoris Groza">
+            <a href="{{ route('product.categories', ['categorySlug' => 'aksesoris']) }}">
+                <img src="{{ asset('img/Produk-Kategori-Aksesori.png') }}" 
+                     loading="lazy" 
+                     alt="Aksesoris Groza">
+            </a>
         </div>
+
+        <!-- Pengereman -->
         <div class="swiper-slide">
-            <img src="img/Produk-Kategori-Sistem-Pengereman.png" loading="lazy" alt="Pengereman Groza">
+            <a href="{{ route('product.categories', ['categorySlug' => 'pengereman']) }}">
+                <img src="{{ asset('img/Produk-Kategori-Sistem-Pengereman.png') }}" 
+                     loading="lazy" 
+                     alt="Pengereman Groza">
+            </a>
         </div>
+
+        <!-- Suspensi -->
         <div class="swiper-slide">
-            <img src="img/Produk-Kategori-Suspensi.png" loading="lazy" alt="Shockbreaker Groza">
+            <a href="{{ route('product.categories', ['categorySlug' => 'suspensi']) }}">
+                <img src="{{ asset('img/Produk-Kategori-Suspensi.png') }}" 
+                     loading="lazy" 
+                     alt="Suspensi Groza">
+            </a>
         </div>
+
     </div>
+
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
 </div>
 <!-- Products End -->
+
 
 <!-- Benefits Start -->
 <p class="section-title">KEUNGGULAN</p>    
@@ -121,12 +147,12 @@
 <!-- Benefits End -->
 
 <!-- YT Profile Start -->
-<div class="container-fluid fact bg-dark my-5 py-5">
+<div class="container-fluid ytprofile bg-dark my-5 py-5">
     <div class="container">
         <div class="row g-4">
             <div class="col-12 text-center">
                 <div class="ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/-lzaXWw-n-0?rel=0&controls=0&autoplay=1&mute=1&loop=1&playlist=-lzaXWw-n-0"  
+                    <iframe src="{{ $iframe->src }}"  
                             allow="autoplay; encrypted-media" 
                             allowfullscreen>
                     </iframe>
@@ -139,47 +165,51 @@
 
 <!-- IG Profile Start -->
 <p class="section-title">KONTEN TERBARU</p>
-<div class="instagram-post" align="center">
+<div class="instagram-post" align="center" style="overflow: hidden;">
     <script src="https://elfsightcdn.com/platform.js" async></script>
     <div class="elfsight-app-46534d90-82ef-4ddf-afce-9ed23bcd55a8" data-elfsight-app-lazy></div>          
 </div>  
 <!-- IG Profile End -->
 
-<!-- Artikel Start -->
-<p class="section-title">ARTIKEL TERPOPULER</p>
-<div class="container text-center">
-    <div class="row">
-        <div class="col-md-4 mb-3 wow fadeInDown">
-            <div class="card h-100">
-                <img src="img/event1.jpg" loading="lazy" class="card-img-top" alt="...">
-                <div class="card-body" style="background-color: #181717; color: #ffffff;">
-                    <h5 style="color: #FFFFFF;">Artikel1</h5>
-                        <p class="card-text">Deskripsi Singkat Artikel.....</p>
-                        <a href="#" class="btn" style="background-color: #f6805d; color: #ffffff;">Selengkapnya →</a>
+{{-- Artikel Start --}}
+@php
+$kontenBerita = \App\Models\Article::orderByDesc('views')->take(3)->get();
+@endphp
+
+<section class="container my-5">
+    <p class="section-title">ARTIKEL TERPOPULER</p>
+    <div class="row g-4">
+        @foreach($kontenBerita as $article)
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->index + 1 }}s">
+                <div class="card border-0 h-100 shadow-sm bg-dark text-white rounded-3 overflow-hidden">
+                    <div class="ratio ratio-16x9">
+                        <img src="{{ asset('storage/' . $article->image) }}" 
+                             loading="lazy" 
+                             class="card-img-top object-fit-cover" 
+                             alt="{{ $article->title }}">
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                        <div>
+                            <h5 class="fw-bold text-white text-uppercase mb-2">{{ $article->title }}</h5>
+                            <p class="text-secondary text-white small mb-3">{{ Str::limit(strip_tags($article->content), 100) }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="text-muted small">
+                                <i class="bi bi-eye"></i> {{ $article->views }} views
+                            </span>
+                            <a href="{{ route('articles.detail', $article->slug) }}" 
+                               class="btn btn-sm rounded-pill px-3 py-2"
+                               style="background-color: #f6805d; color: #ffffff;">
+                                Selengkapnya →
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3 wow fadeInDown">
-                <div class="card h-100">
-                    <img src="img/event1.jpg" loading="lazy" class="card-img-top" alt="...">
-                    <div class="card-body" style="background-color: #181717; color: #ffffff;">
-                    <h5 style="color: #FFFFFF;">Artikel2</h5>
-                    <p class="card-text">Deskripsi Singkat Artikel.....</p>
-                    <a href="#" class="btn" style="background-color: #f6805d; color: #ffffff;">Selengkapnya →</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3 wow fadeInDown">
-            <div class="card h-100">
-                <img src="img/event1.jpg" loading="lazy" class="card-img-top" alt="...">
-                <div class="card-body" style="background-color: #181717; color: #ffffff;">
-                    <h5 style="color: #FFFFFF;">Artikel3</h5>
-                    <p class="card-text">Deskripsi Singkat Artikel.....</p>
-                    <a href="#" class="btn" style="background-color: #f6805d; color: #ffffff;">Selengkapnya →</a>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
-</div>
-<!-- Artikel End -->
+</section>
+
+{{-- Artikel End --}}
+
 @endsection

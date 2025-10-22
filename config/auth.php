@@ -34,11 +34,17 @@ return [
     | Supported: "session"
     |
     */
-
+     
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+    
+        // TAMBAHKAN GUARD INI UNTUK ADMIN
+        'admin' => [
+            'driver' => 'session', // Menggunakan session untuk web
+            'provider' => 'admins', // Mengacu pada provider 'admins' di bawah
         ],
     ],
 
@@ -58,17 +64,18 @@ return [
     | Supported: "database", "eloquent"
     |
     */
-
+    
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+    
+        // TAMBAHKAN PROVIDER INI UNTUK MODEL ADMIN
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class, // Menggunakan model Admin
+        ],
     ],
 
     /*
