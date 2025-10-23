@@ -13,7 +13,7 @@
             </h1>
             <nav aria-label="breadcrumb" class="mt-3">
                 <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
                     <li class="breadcrumb-item">DAFTAR ARTIKEL</li>
                 </ol>
             </nav>
@@ -52,14 +52,15 @@
     <div class="row g-4">
         @foreach($articles as $article)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->index + 1 }}s">
-                <div class="card border-0 h-100 shadow-sm bg-dark text-white rounded-3 overflow-hidden">
-                    <div class="ratio ratio-16x9">
+                <div class="card border-0 h-100 shadow-sm bg-dark text-white rounded-3 overflow-hidden p-3">
+                    <div class="card-img-wrapper mb-3">
                         <img src="{{ asset('storage/' . $article->image) }}" 
                              loading="lazy" 
-                             class="card-img-top object-fit-cover" 
+                             class="card-img-custom" 
                              alt="{{ $article->title }}">
                     </div>
-                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                
+                    <div class="card-body d-flex flex-column justify-content-between p-0">
                         <div>
                             <h5 class="fw-bold text-white text-uppercase mb-2">{{ $article->title }}</h5>
                             <p class="text-secondary text-white small mb-3">{{ Str::limit(strip_tags($article->content), 100) }}</p>
@@ -76,6 +77,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         @endforeach
     </div>

@@ -48,6 +48,8 @@ Route::get('/katalog', [PageController::class, 'catalog'])->name('catalog');
 // LOKASI MITRA
 Route::get('/partners', [PartnerListController::class, 'list'])->name('partner.list');
 Route::get('/partners/filter', [PartnerListController::class, 'filter'])->name('partner.filter');
+Route::get('/cities/by-province/{province}', [PartnerListController::class, 'getCitiesByProvince'])
+    ->name('cities.byProvince');
 
 // LOKASI DISTRIBUTOR
 Route::get('/distributors', [DistributorListController::class, 'list'])->name('distributor.list'); 
@@ -108,17 +110,20 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     Route::resource('event', EventController::class);
     Route::resource('eventcategory', EventCategoryController::class)->only(['index','store','update','destroy']);
     
+    Route::get('/get-subcategories/{category_id}', [App\Http\Controllers\ProductController::class, 'getSubcategories'])->name('get.subcategories');
+    Route::post('/product/check-name', [ProductController::class, 'checkName'])->name('product.checkName');
+
     Route::get('/hero-product', [HeroProductController::class, 'index'])->name('heroproduct.index');
     Route::put('/hero-product/{id}', [HeroProductController::class, 'update'])->name('heroproduct.update');
 
     // Specified Partner/Distributor Route
-    Route::get('/admin/iframe', [IframeController::class, 'index'])->name('iframe.index');
-    Route::put('/admin/iframe/{id}', [IframeController::class, 'update'])->name('iframe.update');
-    Route::get('/admin/partner/get-city/{provinsiId}', [PartnerListController::class, 'getKotaByProvinsi']);
-    Route::get('/admin/distributor/get-city/{provinsiId}', [DistributorListController::class, 'getKotaByProvinsi']);
+    Route::get('/iframe', [IframeController::class, 'index'])->name('iframe.index');
+    Route::put('/iframe/{id}', [IframeController::class, 'update'])->name('iframe.update');
+    Route::get('/partner/get-city/{provinsiId}', [PartnerListController::class, 'getKotaByProvinsi']);
+    Route::get('/distributor/get-city/{provinsiId}', [DistributorListController::class, 'getKotaByProvinsi']);
 
     // Specified Article Route
-    Route::get('article/{slug}/detail', [Articles::class, 'show'])->name('article.show');
+    Route::get('/article/{slug}/detail', [Articles::class, 'show'])->name('article.show');
     Route::post('/article/upload-image', [Articles::class, 'uploadImageSummernote'])->name('article.uploadimage');
 });
 

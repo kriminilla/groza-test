@@ -9,13 +9,13 @@ class Province extends Model
 {
     use HasFactory;
 
-    protected $table = 'provinces';
+    protected $table = 'provinces'; 
     protected $fillable = ['province_name'];
     
     public $timestamps = false;
 
     // Relasi
-    public function lokasi()
+    public function locations()
     {
         return $this->hasMany(PartnerList::class, 'province_id');
     }

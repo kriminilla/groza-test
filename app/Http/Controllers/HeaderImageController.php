@@ -18,12 +18,12 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * Update Gambar Hero Product
+     * Update Gambar Hero Product 
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'header_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'header_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
         ]);
     
         $subcategory = ProductSubcategory::findOrFail($id);

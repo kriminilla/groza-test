@@ -158,6 +158,45 @@
 </section>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Maksimal ukuran file (20MB)
+    const maxSize = 3 * 1024 * 1024;
+
+    // 🔹 Validasi Cover Utama
+    const coverInput = document.getElementById('cover');
+    if (coverInput) {
+        coverInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && file.size > maxSize) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ukuran File Terlalu Besar!',
+                    html: `Gambar cover tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                           File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                    confirmButtonColor: '#ff6600'
+                });
+                e.target.value = ''; // reset input
+            }
+        });
+    }
+
+    // 🔹 Validasi Galeri
+    $(document).on('change', 'input[name="galleries[]"]', function (e) {
+        const file = e.target.files[0];
+        if (file && file.size > maxSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ukuran File Terlalu Besar!',
+                html: `Gambar galeri tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                       File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                confirmButtonColor: '#ff6600'
+            });
+            e.target.value = ''; // reset input
+        }
+    });
+});
+</script>
+<script>
 document.addEventListener("DOMContentLoaded", function() {
     // === VARIABEL DASAR ===
     const container = document.getElementById('galleries-container');

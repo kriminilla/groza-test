@@ -233,7 +233,128 @@
 </div>
 
 {{-- SweetAlert2 --}}
-<script src="{{ asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+<script>
+$(document).ready(function () {
+    $('#category_id').on('change', function () {
+        var categoryId = $(this).val();
+        var subcategorySelect = $('#subcategory_id');
+        subcategorySelect.html('<option value="">Memuat...</option>');
+
+        if (categoryId) {
+            $.ajax({
+                url: '/admin/get-subcategories/' + categoryId, // pakai path langsung
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    subcategorySelect.empty();
+                    subcategorySelect.append('<option value="">-- Pilih Subkategori --</option>');
+                    $.each(data, function (key, subcategory) {
+                        subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.subcategory_name + '</option>');
+                    });
+                },
+                error: function () {
+                    subcategorySelect.html('<option value="">Gagal memuat subkategori</option>');
+                }
+            });
+        } else {
+            subcategorySelect.html('<option value="">-- Pilih Subkategori --</option>');
+        }
+    });
+});
+</script>
+{{-- Validasi Filesize --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const maxImageSize = 3 * 1024 * 1024; // 3MB
+    const maxFlyerSize = 50 * 1024 * 1024; // 50MB
+
+    // 🔁 === Fungsi Validasi Dinamis untuk Semua Input File ===
+    function validateFileInput(input, maxSize, label) {
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Ukuran File Terlalu Besar!',
+                        html: `${label} tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                        confirmButtonColor: '#ff6600'
+                    });
+                    this.value = ''; // reset input
+                }
+            }
+        });
+    }
+
+    // 🔹 Terapkan validasi awal
+    document.querySelectorAll('input[name="image"], input[name="logo"], input[name="color_image[]"]').forEach(el => {
+        validateFileInput(el, maxImageSize, 'Gambar');
+    });
+    document.querySelectorAll('input[name="flyer[]"]').forEach(el => {
+        validateFileInput(el, maxFlyerSize, 'Flyer');
+    });
+
+    // 🔹 Re-bind validasi setiap kali user menambah field baru
+    const observer = new MutationObserver(() => {
+        document.querySelectorAll('input[name="color_image[]"]').forEach(el => {
+            if (!el.dataset.bound) {
+                validateFileInput(el, maxImageSize, 'Gambar Warna');
+                el.dataset.bound = true;
+            }
+        });
+        document.querySelectorAll('input[name="flyer[]"]').forEach(el => {
+            if (!el.dataset.bound) {
+                validateFileInput(el, maxFlyerSize, 'Flyer');
+                el.dataset.bound = true;
+            }
+        });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // === 🚫 CEK DUPLIKAT NAMA PRODUK ===
+    const productNameInput = document.getElementById('product_name');
+    if (productNameInput) {
+        productNameInput.addEventListener('blur', function() {
+            const name = this.value.trim();
+            if (name === '') return;
+
+            fetch('{{ route('product.checkName') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ product_name: name })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Nama Produk Sudah Ada!',
+                        text: 'Silakan gunakan nama lain agar tidak duplikat.',
+                        confirmButtonColor: '#d33'
+                    });
+                    productNameInput.classList.add('is-invalid');
+                } else {
+                    productNameInput.classList.remove('is-invalid');
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: 'Tidak dapat memeriksa nama produk. Coba lagi nanti.',
+                    confirmButtonColor: '#d33'
+                });
+            });
+        });
+    }
+});
+</script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Inisialisasi Stepper

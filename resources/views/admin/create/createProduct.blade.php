@@ -48,7 +48,7 @@
                 {{-- STEP 1: General Info --}}
                 <div id="step-general" class="content" role="tabpanel" aria-labelledby="step-general-trigger">
                   <div class="form-group">
-                      <label for="product_name">Nama Produk</label>
+                      <label for="product_name">Nama Produk</label> 
                       <input type="text" class="form-control @error('product_name') is-invalid @enderror"
                              id="product_name" name="product_name" value="{{ old('product_name') }}" required>
                       @error('product_name')
@@ -85,12 +85,13 @@
                           </select>
                           @error('subcategory_id')
                             <small class="text-danger">{{ $message }}</small>
-                          @enderror
+                          @enderror 
                       </div>
                   </div>
 
                   <div class="form-group">
                       <label for="image">Gambar Produk</label>
+                      <small>*Max. Size 3MB</small>
                       <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" required>
                       @error('image')
                         <small class="text-danger">{{ $message }}</small>
@@ -113,6 +114,7 @@
                 <div id="step-details" class="content" role="tabpanel" aria-labelledby="step-details-trigger">
                   <div class="form-group">
                       <label for="logo">Logo Produk</label>
+                      <small>*Max. Size 3MB</small>
                       <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo">
                       @error('logo')
                         <small class="text-danger">{{ $message }}</small>
@@ -131,8 +133,9 @@
                   {{-- Pilihan Warna --}}
                   <div class="form-group">
                       <label>Pilihan Warna</label>
-                      <div id="warna-container">
-                          <div class="form-row mb-2 warna-item">
+                      <small>*Max. Size 3MB</small>
+                      <div id="color-container">
+                          <div class="form-row mb-2 color-item">
                               <div class="col-md-5">
                                   <input type="file" class="form-control @error('color_image.*') is-invalid @enderror" name="color_image[]">
                                   @error('color_image.*')
@@ -153,16 +156,17 @@
                                   @enderror
                               </div>
                               <div class="col-md-2">
-                                  <button type="button" class="btn btn-danger remove-color">Hapus</button>
+                                  <button type="button" class="btn btn-danger btn-remove-color">Hapus</button>
                               </div>
                           </div>
                       </div>
-                      <button type="button" class="btn btn-primary btn-sm" id="add-warna">+ Tambah Warna</button>
+                      <button type="button" class="btn btn-primary btn-sm" id="add-color">+ Tambah Warna</button>
                   </div>
 
                   {{-- Flyer --}}
                   <div class="form-group">
                       <label>Flyer (Foto / Video)</label>
+                      <small>*Max. Size Foto 3MB, Video 50MB</small>
                       <div id="flyer-container">
                           <div class="form-row mb-2 flyer-item">
                               <div class="col-md-8">
@@ -172,7 +176,7 @@
                                   @enderror
                               </div>
                               <div class="col-md-2">
-                                  <button type="button" class="btn btn-danger remove-flyer">Hapus</button>
+                                  <button type="button" class="btn btn-danger btn-remove-flyer">Hapus</button>
                               </div>
                           </div>
                       </div>
@@ -213,22 +217,146 @@
 </div>
 
 <script>
+$(document).ready(function () {
+    $('#category_id').on('change', function () {
+        var categoryId = $(this).val();
+        var subcategorySelect = $('#subcategory_id');
+        subcategorySelect.html('<option value="">Memuat...</option>');
+
+        if (categoryId) {
+            $.ajax({
+                url: '/admin/get-subcategories/' + categoryId, // pakai path langsung
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    subcategorySelect.empty();
+                    subcategorySelect.append('<option value="">-- Pilih Subkategori --</option>');
+                    $.each(data, function (key, subcategory) {
+                        subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.subcategory_name + '</option>');
+                    });
+                },
+                error: function () {
+                    subcategorySelect.html('<option value="">Gagal memuat subkategori</option>');
+                }
+            });
+        } else {
+            subcategorySelect.html('<option value="">-- Pilih Subkategori --</option>');
+        }
+    });
+});
+</script>
+
+
+{{-- Validasi Filesize --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const maxImageSize = 3 * 1024 * 1024; // 3MB
+    const maxFlyerSize = 50 * 1024 * 1024; // 50MB
+
+    // 🔁 === Fungsi Validasi Dinamis untuk Semua Input File ===
+    function validateFileInput(input, maxSize, label) {
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const file = this.files[0];
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Ukuran File Terlalu Besar!',
+                        html: `${label} tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                        confirmButtonColor: '#ff6600'
+                    });
+                    this.value = ''; // reset input
+                }
+            }
+        });
+    }
+
+    // 🔹 Terapkan validasi awal
+    document.querySelectorAll('input[name="image"], input[name="logo"], input[name="color_image[]"]').forEach(el => {
+        validateFileInput(el, maxImageSize, 'Gambar');
+    });
+    document.querySelectorAll('input[name="flyer[]"]').forEach(el => {
+        validateFileInput(el, maxFlyerSize, 'Flyer');
+    });
+
+    // 🔹 Re-bind validasi setiap kali user menambah field baru
+    const observer = new MutationObserver(() => {
+        document.querySelectorAll('input[name="color_image[]"]').forEach(el => {
+            if (!el.dataset.bound) {
+                validateFileInput(el, maxImageSize, 'Gambar Warna');
+                el.dataset.bound = true;
+            }
+        });
+        document.querySelectorAll('input[name="flyer[]"]').forEach(el => {
+            if (!el.dataset.bound) {
+                validateFileInput(el, maxFlyerSize, 'Flyer');
+                el.dataset.bound = true;
+            }
+        });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // === 🚫 CEK DUPLIKAT NAMA PRODUK ===
+    const productNameInput = document.getElementById('product_name');
+    if (productNameInput) {
+        productNameInput.addEventListener('blur', function() {
+            const name = this.value.trim();
+            if (name === '') return;
+
+            fetch('{{ route('product.checkName') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ product_name: name })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Nama Produk Sudah Ada!',
+                        text: 'Silakan gunakan nama lain agar tidak duplikat.',
+                        confirmButtonColor: '#d33'
+                    });
+                    productNameInput.classList.add('is-invalid');
+                } else {
+                    productNameInput.classList.remove('is-invalid');
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: 'Tidak dapat memeriksa nama produk. Coba lagi nanti.',
+                    confirmButtonColor: '#d33'
+                });
+            });
+        });
+    }
+});
+</script>
+
+
+<script>
 document.addEventListener('DOMContentLoaded', function () {
 
     // === 🧭 STEP 1: Inisialisasi Stepper ===
     window.stepper = new Stepper(document.querySelector('.bs-stepper'));
 
     // === 🎨 STEP 2: Dynamic Input Warna ===
-    const warnaContainer = document.getElementById('warna-container');
-    const btnAddWarna = document.getElementById('add-warna');
+    const colorContainer = document.getElementById('color-container');
+    const btnAddColor = document.getElementById('add-color');
 
-    if (btnAddWarna) {
-        btnAddWarna.addEventListener('click', function () {
-            const index = warnaContainer.querySelectorAll('.color-item').length;
-            const warnaItem = document.createElement('div');
-            warnaItem.classList.add('form-row', 'mb-2', 'warna-item');
+    if (btnAddColor) {
+        btnAddColor.addEventListener('click', function () {
+            const index = colorContainer.querySelectorAll('.color-item').length;
+            const colorItem = document.createElement('div');
+            colorItem.classList.add('form-row', 'mb-2', 'color-item');
 
-            warnaItem.innerHTML = `
+            colorItem.innerHTML = `
                 <div class="col-md-5">
                     <input type="file" name="color_image[]" class="form-control" accept="image/*">
                 </div>
@@ -248,11 +376,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     </button>
                 </div>
             `;
-            warnaContainer.appendChild(warnaItem);
+            colorContainer.appendChild(colorItem);
         });
 
         // 🔹 Fungsi hapus warna (sinkron)
-        warnaContainer.addEventListener('click', function (e) {
+        colorContainer.addEventListener('click', function (e) {
             if (e.target.closest('.btn-remove-color')) {
                 e.target.closest('.color-item').remove();
             }

@@ -50,19 +50,6 @@ class DistributorListController extends Controller
     }
 
     /**
-     * Ambil data kota berdasarkan provinsi (AJAX)
-     */
-    public function getCitiesByProvince(Request $request)
-    {
-        $provinceId = $request->input('province_id');
-        $cities = City::where('province_id', $provinceId)
-            ->orderBy('city_name')
-            ->get(['id', 'city_name']);
-
-        return response()->json($cities);
-    }
-
-    /**
      * Simpan data lokasi baru
      */
     public function store(Request $request)
@@ -123,15 +110,15 @@ class DistributorListController extends Controller
     /**
      * Tampilkan halaman lokasi distributor (frontend user)
      */
+
     public function list()
     {
-        $distributorList = DistributorList::with(['city', 'province'])->get();
-        $cities = City::orderBy('city_name')->get();
+        $distributorList = DistributorList::with(['city.province'])->get();
+        $cities = City::with('province')->orderBy('city_name')->get();
         $provinces = Province::orderBy('province_name')->get();
-
-        // Ambil map pertama untuk tampilan awal
+    
         $initialMapSrc = $distributorList->first()->map_link ?? null;
-
+    
         return view('locations.distributor-list', compact('distributorList', 'cities', 'provinces', 'initialMapSrc'));
     }
 
@@ -140,7 +127,7 @@ class DistributorListController extends Controller
      */
     public function filter(Request $request)
     {
-        $query = DistributorList::with(['city', 'province']);
+        $query = DistributorList::with(['city', 'province']); 
 
         // Filter berdasarkan nama distributor, dan alamatnya
         if ($request->filled('search')) {
@@ -164,5 +151,18 @@ class DistributorListController extends Controller
         $distributorLocations = $query->get();
 
         return response()->json($distributorLocations);
+    }
+
+    /**
+     * Ambil data kota berdasarkan provinsi (AJAX)
+     */
+    public function getCitiesByProvince(Request $request)
+    {
+        $provinceId = $request->input('province_id');
+        $cities = City::where('province_id', $provinceId)
+            ->orderBy('city_name')
+            ->get(['id', 'city_name']);
+
+        return response()->json($cities);
     }
 }

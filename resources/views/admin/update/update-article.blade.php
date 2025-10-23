@@ -158,8 +158,60 @@
 
 @endsection
 
-{{-- Bagian JS (Summernote dan Dynamic Form Logic) --}}
+{{-- Bagian JS (Validasi, Summernote dan Dynamic Form Logic) --}}
 @section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Maksimal ukuran file (3MB)
+    const maxSize = 3 * 1024 * 1024;
+
+    // 🔹 Validasi Cover Utama
+    const coverInput = document.getElementById('image');
+    if (coverInput) {
+        coverInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && file.size > maxSize) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ukuran File Terlalu Besar!',
+                    html: `Gambar cover tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                           File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                    confirmButtonColor: '#ff6600'
+                });
+                e.target.value = ''; // reset input
+                e.target.nextElementSibling.textContent = 'Pilih file...';
+            } else if (file) {
+                e.target.nextElementSibling.textContent = file.name;
+            }
+        });
+    }
+
+    // 🔹 Validasi Galeri
+    $(document).on('change', 'input[name^="galleries"][name$="[src]"]', function (e) {
+        const file = e.target.files[0];
+        if (file && file.size > maxSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ukuran File Terlalu Besar!',
+                html: `Gambar galeri tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                       File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                confirmButtonColor: '#ff6600'
+            });
+            e.target.value = ''; // reset input
+        }
+    });
+
+    // 🔹 Update label file input (jaga-jaga jika diubah manual)
+    document.querySelectorAll('.custom-file-input').forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Pilih file...';
+            e.target.nextElementSibling.textContent = fileName;
+        });
+    });
+});
+</script>
+
+
 <script>
 $(document).ready(function() {
     // 1. Inisialisasi Summernote

@@ -11,7 +11,7 @@
             <p class="page-header animated slideInDown">TENTANG GROZA</p>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
                     <li class="breadcrumb-item text-white active" aria-current="page">TENTANG GROZA</li>
                 </ol>
             </nav>

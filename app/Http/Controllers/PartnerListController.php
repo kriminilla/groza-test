@@ -107,12 +107,12 @@ class PartnerListController extends Controller
      */
     public function list()
     {
-        $partnerList = PartnerList::with('city')->get();
-        $cities = City::orderBy('city_name')->get();
+        $partnerList = PartnerList::with(['city.province'])->get();
+        $cities = City::with('province')->orderBy('city_name')->get();
         $provinces = Province::orderBy('province_name')->get();
-
+    
         $initialMapSrc = $partnerList->first()->map_link ?? null;
-
+    
         return view('locations.partner-list', compact('partnerList', 'cities', 'provinces', 'initialMapSrc'));
     }
 
@@ -146,4 +146,14 @@ class PartnerListController extends Controller
 
         return response()->json($partnerList);
     }
+
+    public function getCitiesByProvince($province_id)
+    {
+        $cities = City::where('province_id', $province_id)
+            ->orderBy('city_name')
+            ->get(['id', 'city_name']);
+    
+        return response()->json($cities);
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Province;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -12,9 +13,13 @@ class CityController extends Controller
      */
     public function index()
     {
-        $city = City::all();
+        // Ambil semua kota beserta provinsinya
+        $city = City::with('province')->get();
 
-        return view('admin.read.city-list', compact('city'));
+        // Ambil semua provinsi untuk dropdown
+        $provinces = Province::all();
+
+        return view('admin.read.city-list', compact('city', 'provinces'));
     }
 
     /**
@@ -23,11 +28,13 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'city_name' => 'required|string|max:100',
+            'city_name'   => 'required|string|max:100',
+            'province_id' => 'required|exists:provinces,id',
         ]);
 
         City::create([
-            'city_name' => $request->city_name,
+            'city_name'   => $request->city_name,
+            'province_id' => $request->province_id,
         ]);
 
         return redirect()->back()->with('success', 'Kota berhasil ditambahkan.');
@@ -39,12 +46,14 @@ class CityController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'city_name' => 'required|string|max:100',
+            'city_name'   => 'required|string|max:100',
+            'province_id' => 'required|exists:provinces,id',
         ]);
 
         $city = City::findOrFail($id);
         $city->update([
-            'city_name' => $request->city_name,
+            'city_name'   => $request->city_name,
+            'province_id' => $request->province_id,
         ]);
 
         return redirect()->back()->with('success', 'Kota berhasil diperbarui.');

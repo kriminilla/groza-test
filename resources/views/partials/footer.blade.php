@@ -13,10 +13,10 @@
                 <a class="btn btn-link" href="https://id.shp.ee/bp67Kv1" target="_blank">Shopee</a>
                 <a class="btn btn-link" href="https://tk.tokopedia.com/ZSBCpDoCS" target="_blank">Tokopedia</a> --}}
                 <p class="footer-title mb-2">Event Support</p>
-                <a class="btn btn-link" href="#" target="_blank">Anniversary</a>
-                <a class="btn btn-link" href="#" target="_blank">Gathering</a>
-                <a class="btn btn-link" href="#" target="_blank">Modification Contest</a>
-                <a class="btn btn-link" href="#" target="_blank">Touring</a>
+                <a class="btn btn-link">Anniversary</a>
+                <a class="btn btn-link">Gathering</a>
+                <a class="btn btn-link">Modification Contest</a>
+                <a class="btn btn-link">Touring</a>
             </div>
             <div class="col-lg-3 col-md-6">
                 <p class="footer-title mb-2">Jam Buka</p>
@@ -59,5 +59,5 @@
 <!-- Footer End -->
 
 <!-- Back to Top Start -->
-<a href="#" class="btn btn-lg btn-lg-square back-to-top" style="color:#FFFFFF ;background-color: #FF6600"><i class="bi bi-arrow-up"></i></a>
+<a href="#" class="btn btn-lg btn-lg-square back-to-top" style="color:#FFFFFF; background-color: #FF6600"><i class="bi bi-arrow-up"></i></a>
 <!-- Back to Top End -->

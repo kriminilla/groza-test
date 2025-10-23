@@ -11,7 +11,7 @@
       <p class="page-header animated slideInDown">KATALOG PRODUK GROZA</p>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-          <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
+          <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
           <li class="breadcrumb-item text-white active" aria-current="page">PRODUK</li>
         </ol>
       </nav>
@@ -27,23 +27,23 @@
     {{-- Kaliper --}}
     @php $kaliper = $subcategories->where('subcategory_name', 'Kaliper')->first(); @endphp
     <div class="col-lg-6">
-      <div class="p-4 bg-putih rounded h-100 d-flex">
-        <div class="d-flex flex-column flex-lg-row justify-content-between w-100">
-          <div class="align-self-start">
-            <a href="{{ route('catalog.subcategories', 'kaliper') }}">
-              <small>Pengereman</small>
-              <h3 class="fw-bold">KALIPER</h3>
-            </a>
-          </div>
-          <div class="d-flex align-items-center justify-content-center mt-3 mt-lg-0 img-hover">
-            <a href="{{ route('catalog.subcategories', 'kaliper') }}">
-              <img src="{{ asset($kaliper->image ?? 'img/kaliper.png') }}" alt="Groza Kaliper"
-                   class="img-fluid" style="max-width: 250px;">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+     <div class="bg-putih rounded h-100 product-card">
+       <div class="product-text">
+         <a href="{{ route('catalog.subcategories', 'kaliper') }}">
+           <small>Pengereman</small>
+           <h3 class="fw-bold mb-0">KALIPER</h3>
+         </a>
+       </div>
+       <div class="product-image img-hover">
+         <a href="{{ route('catalog.subcategories', 'kaliper') }}">
+           <img src="{{ asset($kaliper->image ?? 'img/kaliper.png') }}" alt="Groza Kaliper" style="max-width: 250px;">
+         </a>
+       </div>
+     </div>
+   </div>
+
+
+
 
     {{-- Master Rem --}}
     @php $masterrem = $subcategories->where('subcategory_name', 'Master Rem')->first(); @endphp
@@ -70,12 +70,12 @@
       <div class="p-4 bg-orange text-white rounded h-100 d-flex flex-column align-items-center justify-content-between text-center">
         <div>
           <small class="text-white">Pengereman</small>
-          <a href="{{ route('catalog.subcategories', 'selangrem') }}">
+          <a href="{{ route('catalog.subcategories', 'selang-rem') }}">
             <h3 class="fw-bold">SELANG REM</h3>
           </a>
         </div>
         <div class="img-hover mt-3">
-          <a href="{{ route('catalog.subcategories', 'selangrem') }}">
+          <a href="{{ route('catalog.subcategories', 'selang-rem') }}">
             <img src="{{ asset($selang->image ?? 'img/selang-rem.png') }}" alt="Groza Selang Rem"
                  style="max-width: 180px;">
           </a>
@@ -122,16 +122,16 @@
     </div>
 
     {{-- Swing Arm --}}
-    @php $swing = $subcategories->where('subcategory_name', 'Swing Arm')->first(); @endphp
+    @php $swing = $subcategories->where('subcategory_name', 'Swing Arm')->first(); @endphp  
     <div class="col-lg-5">
-      <div class="p-4 bg-putih rounded h-100 d-flex justify-content-between align-items-center">
-        <div>
+      <div class="bg-putih rounded h-100 product-card">
+        <div class="product-text">
           <a href="{{ route('catalog.subcategories', 'swing-arm') }}">
             <small>Suspensi</small>
             <h3 class="fw-bold">SWING ARM</h3>
           </a>
         </div>
-        <div class="img-hover">
+        <div class="product-image img-hover">
           <a href="{{ route('catalog.subcategories', 'swing-arm') }}">
             <img src="{{ asset($swing->image ?? 'img/swing-arm.png') }}" alt="Groza Swing Arm"
                  style="max-width: 350px;">
@@ -140,17 +140,18 @@
       </div>
     </div>
 
+
     {{-- Tabung Minyak --}}
     @php $tabung = $subcategories->where('subcategory_name', 'Tabung Minyak')->first(); @endphp
     <div class="col-lg-6">
-      <div class="p-4 bg-putih rounded h-100 d-flex justify-content-between align-items-center">
-        <div>
+      <div class="bg-putih rounded h-100 product-card">
+        <div class="product-text">
           <a href="{{ route('catalog.subcategories', 'tabung-minyak') }}">
             <small>Aksesoris</small>
             <h3 class="fw-bold">TABUNG MINYAK REM</h3>
           </a>
         </div>
-        <div class="img-hover">
+        <div class="product-image img-hover">
           <a href="{{ route('catalog.subcategories', 'tabung-minyak') }}">
             <img src="{{ asset($tabung->image ?? 'img/botol-minyak.png') }}" alt="Groza Fluid Tank"
                  style="max-width: 220px;">
@@ -158,6 +159,7 @@
         </div>
       </div>
     </div>
+
 
     {{-- Handgrip --}}
     @php $handgrip = $subcategories->where('subcategory_name', 'Handgrip')->first(); @endphp
@@ -181,7 +183,7 @@
     {{-- Gas Spontan --}}
     @php $gas = $subcategories->where('subcategory_name', 'Gas Spontan')->first(); @endphp
     <div class="col-lg-3">
-      <div class="p-4 bg-orange text-white rounded h-100 d-flex flex-column justify-content-center align-items-center text-center">
+      <div class="p-4 bg-orange rounded h-100 d-flex flex-column justify-content-center align-items-center text-center">
         <div>
           <small class="text-white">Aksesoris</small>
           <a href="{{ route('catalog.subcategories', 'gas-spontan') }}">

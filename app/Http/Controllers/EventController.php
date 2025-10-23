@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
-{
+{ 
     /**
      * Index/Daftar Event Khusus Admin
      *
@@ -45,13 +45,13 @@ class EventController extends Controller
     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $request->validate([ 
             'title' => 'required|string|max:255',
             'category_event_id' => 'required|integer|exists:event_categories,id',
-            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:20480',
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
             'description' => 'nullable|string',
             'event_date' => 'required|date',
-            'galleries.*' => 'nullable|image|mimes:jpg,jpeg,png|max:20480'
+            'galleries.*' => 'nullable|image|mimes:jpg,jpeg,png|max:3072'
         ]);
 
         // Upload cover jika ada
@@ -115,10 +115,10 @@ class EventController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category_event_id' => 'required|integer|exists:event_categories,id',
-            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:20480',
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
             'description' => 'nullable|string',
             'event_date' => 'required|date',
-            'galleries.*' => 'nullable|image|mimes:jpg,jpeg,png|max:20480'
+            'galleries.*' => 'nullable|image|mimes:jpg,jpeg,png|max:3072'
         ]);
 
         // Update slug otomatis

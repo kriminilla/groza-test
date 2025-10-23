@@ -45,35 +45,37 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr class="text-center">
-                                    <th style="width:70%">Nama Kota</th>
-                                    <th style="width:30%">Aksi</th>
+                                    <th>Nama Kota</th>
+                                    <th>Provinsi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($city as $item)
                                     <tr>
                                         <td>{{ $item->city_name }}</td>
+                                        <td>{{ $item->province->province_name ?? '-' }}</td>
                                         <td class="text-center">
                                             {{-- Tombol Edit --}}
                                             <button class="btn btn-sm btn-info" data-toggle="modal"
-                                                data-target="#modal-edit-{{ $item->id }}">
+                                                    data-target="#modal-edit-{{ $item->id }}">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
-
-                                            <!-- Tombol Delete pakai SweetAlert -->
-                                            <form id="delete-form-{{ $item->id }}" action="{{ route('city.destroy', $item->id) }}" method="POST" class="d-inline">
+                            
+                                            {{-- Tombol Delete --}}
+                                            <form id="delete-form-{{ $item->id }}" 
+                                                  action="{{ route('city.destroy', $item->id) }}" 
+                                                  method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button"
-                                                        class="btn btn-sm btn-danger delete-btn"
-                                                        data-id="{{ $item->id }}"
-                                                        data-name="{{ $item->city_name }}">
+                                                <button type="button" class="btn btn-sm btn-danger delete-btn"
+                                                        data-id="{{ $item->id }}" data-name="{{ $item->city_name }}">
                                                     <i class="fas fa-trash"></i> Delete
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
-
+                            
                                     {{-- Modal Edit --}}
                                     <div class="modal fade" id="modal-edit-{{ $item->id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -92,6 +94,18 @@
                                                             <label>Nama Kota</label>
                                                             <input type="text" name="city_name" value="{{ $item->city_name }}" class="form-control" required>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label>Provinsi</label>
+                                                            <select name="province_id" class="form-control" required>
+                                                                <option value="">-- Pilih Provinsi --</option>
+                                                                @foreach($provinces as $prov)
+                                                                    <option value="{{ $prov->id }}" 
+                                                                        {{ $item->province_id == $prov->id ? 'selected' : '' }}>
+                                                                        {{ $prov->province_name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -107,7 +121,7 @@
                                     </div>
                                 @empty
                                     <tr>
-                                        <td colspan="2" class="text-center text-muted">Belum ada data kota</td>
+                                        <td colspan="3" class="text-center text-muted">Belum ada data kota</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -136,6 +150,15 @@
                     <div class="form-group">
                         <label>Nama Kota</label>
                         <input type="text" name="city_name" class="form-control" placeholder="Masukkan nama kota..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Provinsi</label>
+                        <select name="province_id" class="form-control" required>
+                            <option value="">-- Pilih Provinsi --</option>
+                            @foreach($provinces as $prov)
+                                <option value="{{ $prov->id }}">{{ $prov->province_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

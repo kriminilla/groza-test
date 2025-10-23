@@ -15,10 +15,10 @@
 
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('products') }}">PRODUK</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('products') }}" class="header-links">PRODUK</a></li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('catalog.subcategories', $subcategory) }}">{{ strtoupper($subcategory) }}</a>
+                        <a href="{{ route('catalog.subcategories', $subcategory) }}" class="header-links">{{ strtoupper($subcategory) }}</a>
                     </li>
                     <li class="breadcrumb-item text-white active" aria-current="page">
                         {{ strtoupper($product['name']) }}

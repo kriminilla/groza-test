@@ -81,7 +81,7 @@
 
                             <!-- Cover -->
                             <div class="form-group">
-                                <label for="cover">Cover (Maksimal 20MB)</label>
+                                <label for="cover">Cover (Maksimal 3MB)</label>
                                 <input type="file" name="cover" id="cover" class="form-control-file @error('cover') is-invalid @enderror"
                                        accept="image/*">
                                 @error('cover')
@@ -91,7 +91,7 @@
 
                             <!-- Galeri -->
                             <div class="form-group">
-                                <label for="galleries">Galeri (Bisa lebih dari 1, Maksimal 20MB per gambar)</label>
+                                <label for="galleries">Galeri (Bisa lebih dari 1, Maksimal 3MB per gambar)</label>
                                 
                                 <div id="galleries-container">
                                     <div class="input-group mb-2">
@@ -121,6 +121,46 @@
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Maksimal ukuran file (20MB)
+    const maxSize = 3 * 1024 * 1024;
+
+    // 🔹 Validasi Cover Utama
+    const coverInput = document.getElementById('cover');
+    if (coverInput) {
+        coverInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && file.size > maxSize) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ukuran File Terlalu Besar!',
+                    html: `Gambar cover tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                           File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                    confirmButtonColor: '#ff6600'
+                });
+                e.target.value = ''; // reset input
+            }
+        });
+    }
+
+    // 🔹 Validasi Galeri
+    $(document).on('change', 'input[name="galleries[]"]', function (e) {
+        const file = e.target.files[0];
+        if (file && file.size > maxSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ukuran File Terlalu Besar!',
+                html: `Gambar galeri tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                       File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                confirmButtonColor: '#ff6600'
+            });
+            e.target.value = ''; // reset input
+        }
+    });
+});
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

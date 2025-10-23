@@ -16,8 +16,8 @@
             </p>
             <nav aria-label="breadcrumb" class="mt-3">
                 <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('articles.list') }}">KONTEN</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('articles.list') }}" class="header-links">KONTEN</a></li>
                     <li class="breadcrumb-item text-white active" aria-current="page">{{ strtoupper($content['name']) }}</li>
                 </ol>
             </nav>
@@ -43,13 +43,6 @@
                 </div>
             @endforeach
         </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#kontenCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#kontenCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
-        </button>
     </div>
 
     <!-- Thumbnails -->
@@ -69,8 +62,8 @@
 
 <!-- Konten Detail -->
 <section class="container my-5">
-    <article class="mx-auto" style="max-width: 900px;">
-        <div class="article-content lh-lg fs-5" style="color: #1f1f1f;">
+    <article class="mx-auto" style="max-width: 85%;">
+        <div class="article-content lh-lg fs-5">
             {!! $content['content'] !!}
         </div>        
     </article>

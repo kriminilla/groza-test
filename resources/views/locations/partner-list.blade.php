@@ -10,7 +10,7 @@
       <p class="page-header animated slideInDown">LOKASI MITRA</p>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-          <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
+          <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
           <li class="breadcrumb-item text-white active" aria-current="page">LOKASI MITRA</li>
         </ol>
       </nav>
@@ -43,7 +43,7 @@
         </select>
 
         <div class="d-flex gap-2">
-          <button id="btnSearch" class="btn flex-fill fw-bold text-white" style="background-color:#b30000;">SEARCH</button>
+          <button id="btnSearch" class="btn flex-fill fw-bold text-white" style="background-color:#FF6600;">CARI</button>
           <button id="btnReset" class="btn flex-fill fw-bold text-white" style="background-color:#444;">RESET</button>
         </div>
       </div>
@@ -238,6 +238,35 @@ document.addEventListener("DOMContentLoaded", function() {
     currentPage = 1;
     renderCards(filteredData);
   });
+
+  // ketika provinsi berubah → update dropdown kota
+  filterProvince.addEventListener('change', function() {
+    const provinceId = this.value;
+
+    // reset dropdown kota
+    filterCity.innerHTML = '<option value="">Semua Kota</option>';
+
+    if (!provinceId) {
+      // kalau provinsi dikosongkan, tampilkan semua kota lagi
+      @foreach($cities as $c)
+        filterCity.insertAdjacentHTML('beforeend', `<option value="{{ $c->id }}">{{ $c->city_name }}</option>`);
+      @endforeach
+      return;
+    }
+
+    // ambil kota berdasarkan provinsi (AJAX)
+    fetch(`/cities/by-province/${provinceId}`)
+      .then(res => res.json())
+      .then(cities => {
+        cities.forEach(city => {
+          filterCity.insertAdjacentHTML('beforeend', `
+            <option value="${city.id}">${city.city_name}</option>
+          `);
+        });
+      })
+      .catch(err => console.error('Gagal memuat kota:', err));
+  });
+
 
   // simple HTML-escape to avoid XSS when inserting text from JSON
   function escapeHtml(str) {

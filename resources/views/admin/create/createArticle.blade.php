@@ -47,6 +47,7 @@
                             {{-- 2. COVER UTAMA ARTIKEL --}}
                             <div class="form-group">
                                 <label for="image">Gambar Cover Utama <span class="text-danger">*</span></label>
+                                <small>Max. Size 3MB</small>
                                 <div class="custom-file">
                                     {{-- Tambahkan error class pada input file dan gunakan `old('image')` untuk mempertahankan data--}}
                                     <input type="file" name="image" class="custom-file-input @error('image') is-invalid @enderror" id="image" accept="image/*">
@@ -74,7 +75,6 @@
 
                             {{-- 4. GALERI ARTIKEL (DYNAMIC INPUT) --}}
                             <h5>Galeri Tambahan</h5>
-                            
                             {{-- Tampilkan error galleries global jika ada --}}
                             @error('galleries') 
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -92,6 +92,7 @@
                                         
                                         <div class="col-md-5">
                                             <label>File Gambar</label>
+                                            <small>Max. Size 3MB</small>
                                             {{-- Perhatikan penamaan input: galleries[index][src] --}}
                                             <input type="file" name="galleries[{{ $index }}][src]" class="form-control @error('galleries.' . $index . '.src') is-invalid @enderror" accept="image/*">
                                             @error('galleries.' . $index . '.src') 
@@ -131,8 +132,59 @@
 
 @endsection {{-- END SECTION CONTENT --}}
 
-{{-- Bagian JS (Summernote dan Dynamic Form Logic) --}}
+{{-- Bagian JS (Validasi, Summernote dan Dynamic Form Logic) --}}
 @section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Maksimal ukuran file (3MB)
+    const maxSize = 3 * 1024 * 1024;
+
+    // 🔹 Validasi Cover Utama
+    const coverInput = document.getElementById('image');
+    if (coverInput) {
+        coverInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file && file.size > maxSize) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ukuran File Terlalu Besar!',
+                    html: `Gambar cover tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                           File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                    confirmButtonColor: '#ff6600'
+                });
+                e.target.value = ''; // reset input
+                e.target.nextElementSibling.textContent = 'Pilih file...';
+            } else if (file) {
+                e.target.nextElementSibling.textContent = file.name;
+            }
+        });
+    }
+
+    // 🔹 Validasi Galeri
+    $(document).on('change', 'input[name^="galleries"][name$="[src]"]', function (e) {
+        const file = e.target.files[0];
+        if (file && file.size > maxSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ukuran File Terlalu Besar!',
+                html: `Gambar galeri tidak boleh lebih dari <b>${Math.round(maxSize / (1024 * 1024))} MB</b>.<br>
+                       File kamu sekarang berukuran <b>${(file.size / (1024 * 1024)).toFixed(2)} MB</b>`,
+                confirmButtonColor: '#ff6600'
+            });
+            e.target.value = ''; // reset input
+        }
+    });
+
+    // 🔹 Update label file input (jaga-jaga jika diubah manual)
+    document.querySelectorAll('.custom-file-input').forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Pilih file...';
+            e.target.nextElementSibling.textContent = fileName;
+        });
+    });
+});
+</script>
+
 <script>
 $(document).ready(function() {
     // 1. Inisialisasi Summernote

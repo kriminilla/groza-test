@@ -10,12 +10,12 @@ class City extends Model
     use HasFactory;
 
     protected $table = 'cities';
-    protected $fillable = ['city_name'];
+    protected $fillable = ['city_name', 'province_id'];
 
     public $timestamps = false;
 
     // Relasi Tabel
-    public function partnerLocations()
+    public function partnerLocations() 
     {
         return $this->hasMany(PartnerList::class, 'city_id', 'id');
     }

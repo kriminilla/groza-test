@@ -24,7 +24,7 @@ class HeroImageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'src' => 'required|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'src' => 'required|image|mimes:jpg,jpeg,png,webp|max:3072',
             'alt' => 'nullable|string|max:255',
         ]);
 
@@ -48,7 +48,7 @@ class HeroImageController extends Controller
         $image = HeroImage::findOrFail($id);
 
         $request->validate([
-            'src' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'src' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'alt' => 'nullable|string|max:255',
         ]);
 

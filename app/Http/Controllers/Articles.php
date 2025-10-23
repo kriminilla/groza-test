@@ -46,10 +46,10 @@ class Articles extends Controller
         $request->validate([
             'title' => 'required|string|max:255|unique:articles,title',
             'content' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:20480', 
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3072', 
             
             'galleries' => 'nullable|array',
-            'galleries.*.src' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'galleries.*.src' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
             'galleries.*.caption' => 'nullable|string|max:255',
         ]);
     
@@ -179,11 +179,11 @@ class Articles extends Controller
                 Rule::unique('articles', 'title')->ignore($article->id),
             ],
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
             
             // Validasi untuk galeri baru atau update
             'galleries_new' => 'nullable|array',
-            'galleries_new.*.src' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20480',
+            'galleries_new.*.src' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3072',
             'galleries_new.*.caption' => 'nullable|string|max:255',
 
             // Validasi untuk galeri yang sudah ada (hanya caption yang di-update)
@@ -215,7 +215,7 @@ class Articles extends Controller
                 'slug' => Str::slug($request->title), // Update slug
                 'admin_id' => $adminId, // Mengambil ID/Session Admin
                 'image' => $imagePath,
-                'content' => $request->content,
+                'content' => $request->content, 
             ]);
 
             

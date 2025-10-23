@@ -11,7 +11,7 @@
       <h1 class="page-header animated slideInDown fw-bold text-white">DAFTAR EVENT</h1>
       <nav aria-label="breadcrumb" class="mt-3">
         <ol class="breadcrumb justify-content-center text-uppercase page-directory">
-          <li class="breadcrumb-item"><a href="{{ url('/') }}">GROZA</a></li>
+          <li class="breadcrumb-item"><a href="{{ url('/') }}" class="header-links">GROZA</a></li>
           <li class="breadcrumb-item">EVENT</li>
         </ol>
       </nav>
@@ -56,9 +56,9 @@
           <div class="ratio ratio-16x9">
             <img src="{{ asset('storage/' . $event->cover) }}" 
                  loading="lazy" 
-                 class="card-img-top object-fit-cover" 
-                 alt="{{ $event->judul }}">
-          </div>
+                 class="card-img-custom" 
+                 alt="{{ $event->title }}">
+                </div>
           <div class="card-body d-flex flex-column justify-content-between p-4">
             <div>
               <h5 class="fw-bold text-white text-uppercase mb-2">{{ $event->title }}</h5>

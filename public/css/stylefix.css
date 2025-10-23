@@ -28,6 +28,9 @@ body {
     color: #181717;
 }
 
+.header-links{
+    color: #FF6600;
+}
 
 #no-results-message{
     font-size: 30px;
@@ -100,8 +103,8 @@ h4{
 }
 
 .btn-primary:hover {
-    background-color: #e65c00;   /* orange lebih gelap saat hover */
-    border-color: #e65c00;
+    background-color: #ff6600;   /* orange lebih gelap saat hover */
+    border-color: #ff6600;
     transform: scale(1.05);      /* efek zoom pas hover */
 }
 
@@ -180,7 +183,7 @@ h4{
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: orange !important; /* Keep active color */
+    color: #ff6600 !important; /* Keep active color */
 }
 
 @media (max-width: 991.98px) {
@@ -1088,6 +1091,7 @@ h4{
       border-radius: 10px;
       padding: 6px 16px;
     }
+    
     /* Warna background lembut */
     .bg-orange {
         background: linear-gradient(135deg, #ff6600, #ff9966);
@@ -1095,14 +1099,9 @@ h4{
     }
     
     .bg-putih {
-        /* background: linear-gradient(135deg, #e8f5e9, #ff6600); */
         background: #FFFFFF;
         color: #333;
     }
-
-    .bg-sofa { background: #f3f3f3; }
-    .bg-sneakers { background: #e3f2fd; }
-    .bg-abuabu { background: #fff3cd; }
     
     .img-hover {
     position: relative;
@@ -1122,6 +1121,60 @@ h4{
     transform: scale(1.3);
     animation: float 3s ease-in-out infinite; /* floating animation */
     }
+    
+    /* ===== Responsiveness Fix untuk Halaman Produk ===== */
+    .product-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      padding: 1.5rem;
+    }
+    
+    .product-text {
+      text-align: left;
+    }
+    
+    .product-text small {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .product-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .product-image img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+    
+    .product-image img:hover {
+      transform: scale(1.3);
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Mobile layout: teks di atas gambar */
+    @media (max-width: 768px) {
+      .product-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .product-text {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+    
+      .product-image img {
+        max-width: 80%;
+      }
+    }
+
 
 /* Products End */
 
@@ -1431,4 +1484,21 @@ h4{
     .list-mitra-scroll {
         max-height: 300px; /* List lebih pendek di mobile */
     }
+}
+
+.card-img-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;        /* Rasio modern */
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-img-custom {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;          /* ✅ Tidak melar */
+    object-position: center;      /* ✅ Fokus tengah */
+    background-color: #111;       /* ✅ Biar rapi kalau ada ruang kosong */
+    padding: 8px;                 /* ✅ Tambah padding di dalam gambar */
+    border-radius: 10px;
 }

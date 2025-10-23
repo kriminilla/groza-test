@@ -82,7 +82,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-trophy fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Kualitas Terbaik, <br> Untuk Kendaraan Bermotor</h5>
+                    <h5 class="heading" style="color: #ff6600;">Kualitas Terbaik, <br> Untuk Kendaraan Bermotor</h5>
                     <p class="para">Setiap produk Groza, dari shockbreaker hingga disc brake, dibuat dengan standar kualitas tinggi. Tahan lama, bertenaga, dan selalu bisa diandalkan.</p>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-star fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Teknologi Terbaru, dan Inovatif</h5>
+                    <h5 class="heading" style="color: #ff6600;">Teknologi Terbaru, dan Inovatif</h5>
                     <p class="para">Groza selalu menghadirkan produk dengan teknologi canggih, seperti kaliper dan master rem terbaru, untuk memastikan kenyamanan dan keselamatan Anda saat berkendara.</p>
                 </div>
             </div>
@@ -104,7 +104,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-tasks fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Pilihan Aksesori Lengkap</h5>
+                    <h5 class="heading" style="color: #ff6600;">Pilihan Aksesori Lengkap</h5>
                     <p class="para">Mulai dari selang rem hingga handgrip, Groza menyediakan berbagai Aksesori berkualitas untuk meningkatkan performa motor. Tak perlu bingung, semua kebutuhan motor ada di sini!</p>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-feather fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Desain Stylish dan Ergonomis</h5>
+                    <h5 class="heading" style="color: #ff6600;">Desain Stylish dan Ergonomis</h5>
                     <p class="para">Selain berfungsi dengan baik, produk Groza juga memiliki desain yang keren dan nyaman digunakan. Handgrip dan komponen lainnya punya tampilan yang stylish, memberi kesan sporty pada kendaraan motor Anda.</p>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-hand-holding-heart fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Dukungan Purna Jual Terbaik</h5>
+                    <h5 class="heading" style="color: #ff6600;">Dukungan Purna Jual Terbaik</h5>
                     <p class="para">Nikmati layanan purna jual yang terpercaya dengan garansi resmi 6 bulan. Groza selalu siap memberikan dukungan penuh untuk memastikan pengalaman belanja Anda berjalan lancar.</p>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                     <div class="card-icon mx-auto">
                         <i class="fas fa-medal fa-lg"></i>
                     </div>
-                    <h5 class="heading" style="color: #e4905b;">Harga Terjangkau dengan Kualitas Premium</h5>
+                    <h5 class="heading" style="color: #ff6600;">Harga Terjangkau dengan Kualitas Premium</h5>
                     <p class="para">Groza memberikan produk berkualitas tinggi dengan harga yang bersaing. Anda nggak perlu khawatir soal harga, karena kualitas tetap jadi prioritas utama Groza!</p>
                 </div>
             </div>
@@ -181,14 +181,15 @@ $kontenBerita = \App\Models\Article::orderByDesc('views')->take(3)->get();
     <div class="row g-4">
         @foreach($kontenBerita as $article)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->index + 1 }}s">
-                <div class="card border-0 h-100 shadow-sm bg-dark text-white rounded-3 overflow-hidden">
-                    <div class="ratio ratio-16x9">
+                <div class="card border-0 h-100 shadow-sm bg-dark text-white rounded-3 overflow-hidden p-3">
+                    <div class="card-img-wrapper mb-3">
                         <img src="{{ asset('storage/' . $article->image) }}" 
                              loading="lazy" 
-                             class="card-img-top object-fit-cover" 
+                             class="card-img-custom" 
                              alt="{{ $article->title }}">
                     </div>
-                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                
+                    <div class="card-body d-flex flex-column justify-content-between p-0">
                         <div>
                             <h5 class="fw-bold text-white text-uppercase mb-2">{{ $article->title }}</h5>
                             <p class="text-secondary text-white small mb-3">{{ Str::limit(strip_tags($article->content), 100) }}</p>
@@ -209,6 +210,7 @@ $kontenBerita = \App\Models\Article::orderByDesc('views')->take(3)->get();
         @endforeach
     </div>
 </section>
+
 
 {{-- Artikel End --}}
 

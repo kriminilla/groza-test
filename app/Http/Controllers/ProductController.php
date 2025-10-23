@@ -9,7 +9,7 @@ use App\Models\Size;
 use App\Models\ProductCategories;
 use App\Models\ColorOption;
 use App\Models\ProductSubcategory;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -22,16 +22,26 @@ class ProductController extends Controller
     */
     public function index()
     {
-        $category = ProductCategories::orderBy('category_name')->get();
-        $products = Product::with(['category','subcategory','colors','flyers','sizes'])
-                         ->paginate(10);
-        return view('admin.read.product-list', compact('products', 'category'));
+        $categories = ProductCategories::orderBy('category_name')->get();
+        $subcategories = ProductSubcategory::orderBy('subcategory_name')->get();
+    
+        $products = Product::with(['category', 'subcategory', 'colors', 'flyers', 'sizes'])
+                            ->get();
+    
+        return view('admin.read.product-list', compact('products', 'categories', 'subcategories'));
     }
+
 
     /**
      * Form Tambah Produk
      *
     */
+    public function getSubcategories($category_id)
+    {
+        $subcategories = \App\Models\ProductSubcategory::where('category_id', $category_id)->get();
+        return response()->json($subcategories);
+    }
+
     public function create()
     {
         $categories    = ProductCategories::orderBy('category_name')->get();
@@ -41,6 +51,19 @@ class ProductController extends Controller
 
         return view('admin.create.createProduct', compact('categories', 'subcategories', 'sizes', 'colorCodes'));
     }
+    
+    /**
+     * Pencegahan Duplicate Input
+     */
+    public function checkName(Request $request)
+    {
+        $exists = \App\Models\Product::where('product_name', $request->product_name)->exists();
+    
+        return response()->json([
+            'exists' => $exists
+        ]);
+    }
+
 
     /**
      * Store produk baru
@@ -52,18 +75,18 @@ class ProductController extends Controller
             'product_name'   => 'required|string|max:255',
             'category_id'    => 'required|exists:categories,id',
             'subcategory_id' => 'required|exists:subcategories,id',
-            'logo'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
-            'image'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
-            'description'    => 'nullable|string', // Kolom description tidak berubah
+            'logo'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'image'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'description'    => 'nullable|string', 
             'caption'        => 'nullable|string',
             'sizes'          => 'nullable|array',
 
             // Flyer (gambar / video)
             'flyer'          => 'nullable|array',
-            'flyer.*'        => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4,avi,mov|max:51200',
+            'flyer.*'        => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4,avi,mov,gif|max:51200',
 
             // Warna
-            'color_image.*'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'color_image.*'  => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'color_code_id.*'=> 'nullable|exists:color_codes,id',
         ]);
 
@@ -144,8 +167,8 @@ class ProductController extends Controller
             'product_name'      => 'required|string|max:255',
             'category_id'       => 'required|exists:categories,id',
             'subcategory_id'    => 'required|exists:subcategories,id',
-            'logo'              => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
-            'image'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'logo'              => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'image'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'caption'           => 'nullable|string',
             'description'       => 'nullable|string',
             'sizes'             => 'nullable|array',
@@ -155,7 +178,7 @@ class ProductController extends Controller
             'color_code_id'     => 'nullable|array',           
             'color_code_id.*'   => 'nullable|exists:color_codes,id',
             'color_image'       => 'nullable|array',           
-            'color_image.*'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:20480',
+            'color_image.*'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
             'deleted_color_ids' => 'nullable|array',           
     
             // FLYER
@@ -348,7 +371,7 @@ class ProductController extends Controller
                 return [
                     'name' => $sub->subcategory_name, 
                     'slug' => $sub->slug,
-                    'img'  => asset('img/' . Str::slug($sub->slug) . '.png'),
+                    'img'  =>  asset($sub->image),
                 ];
             });
     
@@ -368,7 +391,7 @@ class ProductController extends Controller
         $categoryMap = [
             'kaliper'       => 'KALIPER',
             'master-rem'    => 'MASTER REM',
-            'selangrem'     => 'SELANG REM',
+            'selang-rem'     => 'SELANG REM',
             'piringan'      => 'PIRINGAN',
             'shockbreaker'  => 'SHOCKBREAKER',
             'tabung-minyak' => 'TABUNG MINYAK',
@@ -407,7 +430,7 @@ class ProductController extends Controller
         // Ambil header image (dengan fallback)
         $headerImage = $subCategory->header_image
             ? asset($subCategory->header_image)
-            : asset('img/default-header.jpg');
+            : asset('img/Hanasita - 1.png');
     
         // Return Views
         return view('product.subcategory-lineup', compact(
